@@ -1,0 +1,45 @@
+function myFunction(e) {
+  //初期設定
+  var itemResponses = e.response.getItemResponses();
+  var message = '';
+  //入力項目の解析
+  for (var i = 0; i < itemResponses.length; i++) {
+    var itemResponse = itemResponses[i];
+    var question = itemResponse.getItem().getTitle();
+    var answer = itemResponse.getResponse();
+   
+    if(question=="イベント名"){
+      var cTitle=answer;
+//    }else if(question=="イベント詳細"){
+//      message=answer;
+    }else if(question=="イベント主催者"){
+      message='【イベント主催者】\n' + '　' + answer;
+    }else if(question=="イベント内容"){
+      message=message+'\n【イベント内容】\n' + '　' + answer;
+    }else if(question=="参加条件（モデル、人数制限など）"){
+      message=message+'\n【参加条件（モデル、人数制限など）】\n' + '　' + answer;
+    }else if(question=="参加方法"){
+      message=message+'\n【参加方法】\n' + '　' + answer;
+    }else if(question=="備考"){
+      message=message+'\n【備考】\n' + '　' + answer;
+    }else if(question=="日付"){
+      var cDate=answer.replace(/-/g,'/');
+      var cEDate=cDate;      
+//    }else if(question=="開始日"){
+//      var cDate=answer.replace(/-/g,'/');
+    }else if(question=="開始時刻"){
+      var cDate=cDate + " " + answer;
+//    }else if(question=="終了日"){
+//      var cEDate=answer.replace(/-/g,'/');
+    }else if(question=="終了時刻"){
+      if(answer==="00:00"){
+        answer="23:59";
+      }
+      var cEDate=cEDate + " " + answer;
+    }
+  }
+  //Googleカレンダーへの投稿
+  var objCalendar = CalendarApp.getCalendarById('≪登録先カレンダーIDを入力≫');
+  var objEvent = objCalendar.createEvent(cTitle,new Date(cDate),new Date(cEDate),{description:message}).setGuestsCanSeeGuests(false); 
+
+}
